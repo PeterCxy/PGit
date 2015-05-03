@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.support.v7.app.AppCompatDialog;
@@ -46,6 +48,18 @@ public abstract class ToolbarDialog extends AppCompatDialog
 				dismiss();
 			}
 		});
+		mToolbar.inflateMenu(R.menu.dialog);
+		mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				if (item.getItemId() == R.id.finish) {
+					onConfirm();
+					return true;
+				} else {
+					return false;
+				}
+			}
+		});
 		mToolbar.setTitle(mTitle);
 		
 		onInitView();
@@ -62,4 +76,5 @@ public abstract class ToolbarDialog extends AppCompatDialog
 	
 	protected abstract int getLayoutResource();
 	protected abstract void onInitView();
+	protected abstract void onConfirm();
 }
