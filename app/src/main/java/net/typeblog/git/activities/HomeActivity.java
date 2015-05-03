@@ -1,7 +1,9 @@
 package net.typeblog.git.activities;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -19,7 +21,7 @@ import net.typeblog.git.support.RepoManager;
 import static net.typeblog.git.BuildConfig.DEBUG;
 import static net.typeblog.git.support.Utility.*;
 
-public class HomeActivity extends ToolbarActivity
+public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemClickListener
 {
 	private static final String TAG = HomeActivity.class.getSimpleName();
 	
@@ -39,8 +41,17 @@ public class HomeActivity extends ToolbarActivity
 		//new AddRepoDialog().show();
 		mList = $(this, R.id.repo_list);
 		mAdapter = new RepoAdapter(mRepoNames, mRepoUrls);
+		mList.setOnItemClickListener(this);
 		mList.setAdapter(mAdapter);
 		reload();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> list, View v, int pos, long id) {
+		Intent i = new Intent(Intent.ACTION_MAIN);
+		i.setClass(this, RepoActivity.class);
+		i.putExtra("location", mRepos.get(pos));
+		startActivity(i);
 	}
 	
 	private void reload() {
