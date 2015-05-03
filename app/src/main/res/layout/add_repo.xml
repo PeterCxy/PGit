@@ -52,6 +52,7 @@
 		android:layout_margin="8dp"
 		android:singleLine="true"
 		android:hint="@string/password"
+		android:inputType="textPassword"
 		app:met_textColor="@color/white"
 		app:met_textColorHint="@color/light_grey"
 		app:met_floatingLabel="highlight"/>
