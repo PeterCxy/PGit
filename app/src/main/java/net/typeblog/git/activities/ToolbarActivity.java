@@ -3,13 +3,13 @@ package net.typeblog.git.activities;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import net.typeblog.git.R;
 import static net.typeblog.git.support.Utility.*;
 
-public abstract class ToolbarActivity extends ActionBarActivity
+public abstract class ToolbarActivity extends AppCompatActivity
 {
 	private Toolbar mToolbar;
 
@@ -29,6 +29,8 @@ public abstract class ToolbarActivity extends ActionBarActivity
 		if (Build.VERSION.SDK_INT >= 21) {
 			mToolbar.setElevation(15.6f);
 		}
+		
+		onInitView();
 	}
 	
 	protected Toolbar getToolbar() {
@@ -36,4 +38,5 @@ public abstract class ToolbarActivity extends ActionBarActivity
 	}
 	
 	protected abstract int getLayoutResource();
+	protected abstract void onInitView();
 }

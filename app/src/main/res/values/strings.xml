@@ -3,5 +3,12 @@
 
     <string name="app_name">PGit</string>
     <string name="hello_world">Hello world!</string>
+	
+	<!-- Add repo -->
+	<string name="add_repo">Add repo</string>
+	<string name="local_path">Local path</string>
+	<string name="clone_url">Clone URL</string>
+	<string name="username">Username (Optional)</string>
+	<string name="password">Password (Optional)</string>
 
 </resources>
