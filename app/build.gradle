@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.0"
+    compileSdkVersion 22
+    buildToolsVersion "22.1.0"
 
     defaultConfig {
         applicationId "net.typeblog.git"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -20,5 +20,7 @@ android {
 }
 
 dependencies {
+	compile 'org.eclipse.jgit:org.eclipse.jgit:3.6.+'
+	compile 'com.android.support:appcompat-v7:22.0.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
