@@ -6,4 +6,10 @@
 	<include
 		layout="@layout/toolbar"/>
 	
+	<ListView
+		android:id="@+id/repo_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@+id/toolbar"/>
+	
 </RelativeLayout>

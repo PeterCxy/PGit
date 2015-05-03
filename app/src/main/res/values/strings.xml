@@ -14,5 +14,6 @@
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
+	<string name="nothing">(○\'ω\'○)</string>
 
 </resources>

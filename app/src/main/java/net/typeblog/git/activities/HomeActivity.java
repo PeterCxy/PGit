@@ -1,18 +1,33 @@
 package net.typeblog.git.activities;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import android.support.v7.widget.AppCompatEditText;
 
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.typeblog.git.R;
+import net.typeblog.git.adapters.RepoAdapter;
 import net.typeblog.git.dialogs.ToolbarDialog;
 import net.typeblog.git.support.RepoManager;
+import static net.typeblog.git.BuildConfig.DEBUG;
 import static net.typeblog.git.support.Utility.*;
 
 public class HomeActivity extends ToolbarActivity
 {
+	private static final String TAG = HomeActivity.class.getSimpleName();
+	
+	private List<String> mRepos = new ArrayList<>();
+	private List<String> mRepoNames = new ArrayList<>();
+	private List<String> mRepoUrls = new ArrayList<>();
+	private RepoAdapter mAdapter;
+	private ListView mList;
 
 	@Override
 	protected int getLayoutResource() {
@@ -21,7 +36,38 @@ public class HomeActivity extends ToolbarActivity
 
 	@Override
 	protected void onInitView() {
-		new AddRepoDialog().show();
+		//new AddRepoDialog().show();
+		mList = $(this, R.id.repo_list);
+		mAdapter = new RepoAdapter(mRepoNames, mRepoUrls);
+		mList.setAdapter(mAdapter);
+		reload();
+	}
+	
+	private void reload() {
+		mRepos.clear();
+		mRepoNames.clear();
+		mRepoUrls.clear();
+		
+		RepoManager manager = RepoManager.getInstance();
+		
+		String[] repos = manager.getRepoLocationList();
+		mRepos.addAll(Arrays.asList(repos));
+		
+		for (String repo : mRepos) {
+			
+			if (DEBUG) {
+				Log.d(TAG, "processing repo " + repo);
+			}
+			
+			if (repo.lastIndexOf("/") == repo.length() - 1) {
+				repo = repo.substring(0, repo.length() - 1);
+			}
+			
+			mRepoNames.add(repo.substring(repo.lastIndexOf("/") + 1, repo.length()));
+			mRepoUrls.add(manager.getUrl(repo));
+		}
+		
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	private class AddRepoDialog extends ToolbarDialog {
@@ -61,6 +107,7 @@ public class HomeActivity extends ToolbarActivity
 				RepoManager.getInstance().addRepo(location, url, username, password);
 				
 				dismiss();
+				reload();
 			}
 		}
 	}
