@@ -12,7 +12,7 @@
 		android:id="@+id/local_path"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/toolbar"
+		android:layout_below="@+id/toolbar_wrapper"
 		android:layout_margin="8dp"
 		android:singleLine="true"
 		android:hint="@string/local_path"

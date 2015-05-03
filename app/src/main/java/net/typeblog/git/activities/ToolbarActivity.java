@@ -27,7 +27,7 @@ public abstract class ToolbarActivity extends AppCompatActivity
 		setSupportActionBar(mToolbar);
 		
 		if (Build.VERSION.SDK_INT >= 21) {
-			mToolbar.setElevation(15.6f);
+			findViewById(R.id.toolbar_wrapper).setElevation(15.6f);
 		}
 		
 		onInitView();
