@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import net.typeblog.git.R;
@@ -58,9 +61,16 @@ public class CommitAdapter extends BaseAdapter
 		
 		RevCommit commit = mList.get(position);
 		
-		hash.setText(commit.getId().toString());
+		hash.setText(ObjectId.toString(commit.getId()));
 		message.setText(commit.getShortMessage());
-		author.setText(commit.getAuthorIdent().getName());
+		author.setText(commit.getAuthorIdent().getName() + " <" + commit.getAuthorIdent().getEmailAddress() + ">");
+		
+		// Date
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSSZ");
+		format.setTimeZone(commit.getAuthorIdent().getTimeZone());
+		Date commitDate = new Date();
+		commitDate.setTime(commit.getCommitTime() * 1000l);
+		date.setText(format.format(commitDate));
 		
 		return v;
 	}

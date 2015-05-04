@@ -43,11 +43,10 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_margin="10dp"
-		android:layout_below="@id/message"
-		android:layout_toRightOf="@id/author"
+		android:layout_below="@id/author"
 		android:gravity="center_vertical"
 		android:textColor="@color/light_grey"
-		android:textSize="16sp"
+		android:textSize="12sp"
 		android:singleLine="true"
 		android:ellipsize="end"/>
 	
