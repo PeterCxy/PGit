@@ -12,6 +12,12 @@
 	<string name="password">Password (Optional)</string>
 	<string name="finish">OK</string>
 	
+	<!-- Repo -->
+	<string-array name="repo_tabs">
+		<item>Files</item>
+		<item>Commits</item>
+	</string-array>
+	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
 	<string name="nothing">(○\'ω\'○)</string>

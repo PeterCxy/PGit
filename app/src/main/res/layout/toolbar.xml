@@ -14,4 +14,12 @@
 		app:theme="@style/ThemeOverlay.AppCompat.Dark"
 		app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 	
+	<net.typeblog.git.widget.SlidingTabLayout
+		android:id="@+id/tabs"
+		android:layout_width="match_parent"
+		android:layout_height="48dp"
+		android:layout_below="@id/toolbar"
+		android:background="?attr/colorPrimary"
+		android:visibility="gone"/>
+	
 </RelativeLayout>
