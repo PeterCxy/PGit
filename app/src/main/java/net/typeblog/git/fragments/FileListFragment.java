@@ -45,7 +45,7 @@ public class FileListFragment extends BaseListFragment<FileAdapter>
 		super.onItemClick(position);
 		File f = mList.get(position);
 		
-		if (!f.isDirectory()) return;
+		if (!f.isDirectory() || f.getName().equals(".git")) return;
 		
 		if (f.getAbsolutePath().endsWith("..")) {
 			mCurrent = new File(mCurrent).getParentFile().getAbsolutePath();
