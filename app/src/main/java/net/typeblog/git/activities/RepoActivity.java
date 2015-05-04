@@ -2,10 +2,12 @@ package net.typeblog.git.activities;
 
 import net.typeblog.git.R;
 import net.typeblog.git.fragments.CommitListFragment;
+import net.typeblog.git.fragments.FileListFragment;
 
 public class RepoActivity extends ToolbarActivity
 {
 	private CommitListFragment mCommits;
+	private FileListFragment mFiles;
 
 	@Override
 	protected int getLayoutResource() {
@@ -16,9 +18,9 @@ public class RepoActivity extends ToolbarActivity
 	protected void onInitView() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		mCommits = new CommitListFragment();
-		mCommits.setArguments(getIntent().getExtras());
-		getFragmentManager().beginTransaction().replace(R.id.frame, mCommits).commit();
+		mFiles = new FileListFragment();
+		mFiles.setArguments(getIntent().getExtras());
+		getFragmentManager().beginTransaction().replace(R.id.frame, mFiles).commit();
 	}
 
 }
