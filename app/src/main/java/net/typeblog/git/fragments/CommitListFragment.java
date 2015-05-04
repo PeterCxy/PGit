@@ -19,31 +19,20 @@ import net.typeblog.git.adapters.CommitAdapter;
 import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.BuildConfig.DEBUG;
 
-public class CommitListFragment extends BaseListFragment<CommitAdapter>
+public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommit>
 {
 	private static final String TAG = CommitListFragment.class.getSimpleName();
 	
-	private List<RevCommit> mList = new ArrayList<>();
 	private GitProvider mProvider;
 	
 	@Override
 	protected CommitAdapter createAdapter() {
-		return new CommitAdapter(mList);
+		return new CommitAdapter(mItemList);
 	}
 
 	@Override
 	protected void onViewInflated() {
 		
-	}
-
-	@Override
-	protected void reload() {
-		
-		if (DEBUG) {
-			Log.d(TAG, getArguments().getString("location"));
-		}
-		
-		new LoadTask().execute();
 	}
 
 	@Override
@@ -56,39 +45,22 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter>
 		
 		mProvider = (GitProvider) activity;
 	}
-	
-	private class LoadTask extends AsyncTask<Void, Void, List<RevCommit>> {
 
-		@Override
-		protected List<RevCommit> doInBackground(Void... params) {
-			try {
-				List<RevCommit> ret = new ArrayList<>();
-				for (RevCommit commit : mProvider.git().log().all().call()) {
-					
-					if (DEBUG) {
-						Log.d(TAG, "adding commit " + commit.getShortMessage());
-					}
-					
-					ret.add(commit);
+	@Override
+	protected void doLoad(List<RevCommit> list) {
+		try {
+			for (RevCommit commit : mProvider.git().log().all().call()) {
+
+				if (DEBUG) {
+					Log.d(TAG, "adding commit " + commit.getShortMessage());
 				}
-				return ret;
-			} catch (IOException e) {
-				Log.e(TAG, Log.getStackTraceString(e));
-			} catch (GitAPIException e) {
-				Log.e(TAG, Log.getStackTraceString(e));
-			}
-			return null;
-		}
 
-		@Override
-		protected void onPostExecute(List<RevCommit> result) {
-			super.onPostExecute(result);
-			
-			if (result == null) return;
-			
-			mList.clear();
-			mList.addAll(result);
-			mAdapter.notifyDataSetChanged();
+				list.add(commit);
+			}
+		} catch (IOException e) {
+			Log.e(TAG, Log.getStackTraceString(e));
+		} catch (GitAPIException e) {
+			Log.e(TAG, Log.getStackTraceString(e));
 		}
 	}
 }

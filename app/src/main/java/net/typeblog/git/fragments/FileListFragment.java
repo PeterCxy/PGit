@@ -13,24 +13,18 @@ import java.util.List;
 
 import net.typeblog.git.adapters.FileAdapter;
 
-public class FileListFragment extends BaseListFragment<FileAdapter>
+public class FileListFragment extends BaseListFragment<FileAdapter, File>
 {
-	private List<File> mList = new ArrayList<>();
 	private String mRepo, mCurrent;
 
 	@Override
 	protected FileAdapter createAdapter() {
-		return new FileAdapter(mList);
+		return new FileAdapter(mItemList);
 	}
 
 	@Override
 	protected void onViewInflated() {
 		
-	}
-
-	@Override
-	protected void reload() {
-		new FetchTask().execute();
 	}
 
 	@Override
@@ -43,7 +37,7 @@ public class FileListFragment extends BaseListFragment<FileAdapter>
 	@Override
 	protected void onItemClick(int position) {
 		super.onItemClick(position);
-		File f = mList.get(position);
+		File f = mItemList.get(position);
 		
 		if (!f.isDirectory() || f.getName().equals(".git")) return;
 		
@@ -54,29 +48,15 @@ public class FileListFragment extends BaseListFragment<FileAdapter>
 		}
 		reload();
 	}
-	
-	private class FetchTask extends AsyncTask<Void, Void, List<File>> {
 
-		@Override
-		protected List<File> doInBackground(Void... params) {
-			List<File> ret = new ArrayList<>();
-			File[] files = new File(mCurrent).listFiles();
-			ret.addAll(Arrays.asList(files));
-			Collections.sort(ret, new FileComparator());
-			
-			if (!new File(mCurrent).equals(new File(mRepo))) {
-				ret.add(0, new File(mCurrent + "/.."));
-			}
-			
-			return ret;
-		}
+	@Override
+	protected void doLoad(List<File> list) {
+		File[] files = new File(mCurrent).listFiles();
+		list.addAll(Arrays.asList(files));
+		Collections.sort(list, new FileComparator());
 
-		@Override
-		protected void onPostExecute(List<File> result) {
-			super.onPostExecute(result);
-			mList.clear();
-			mList.addAll(result);
-			mAdapter.notifyDataSetChanged();
+		if (!new File(mCurrent).equals(new File(mRepo))) {
+			list.add(0, new File(mCurrent + "/.."));
 		}
 	}
 	
