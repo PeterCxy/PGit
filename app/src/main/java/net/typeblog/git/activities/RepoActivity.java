@@ -5,13 +5,24 @@ import android.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+
+import java.io.File;
+import java.io.IOException;
+
 import net.typeblog.git.R;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
+import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.support.Utility.*;
 
-public class RepoActivity extends ToolbarActivity
+public class RepoActivity extends ToolbarActivity implements GitProvider
 {
+	private Repository mRepo;
+	private Git mGit;
+	
 	private Fragment[] mFragments = {
 		new FileListFragment(),
 		new CommitListFragment(),
@@ -26,6 +37,18 @@ public class RepoActivity extends ToolbarActivity
 
 	@Override
 	protected void onInitView() {
+		
+		try {
+			mRepo = new FileRepositoryBuilder()
+				.setGitDir(new File(getIntent().getStringExtra("location") + "/.git"))
+				.readEnvironment()
+				.findGitDir()
+				.build();
+		} catch (IOException e) {
+			finish();
+		}
+		mGit = new Git(mRepo);
+		
 		// Pager
 		mPager = $(this, R.id.pager);
 		
@@ -54,6 +77,11 @@ public class RepoActivity extends ToolbarActivity
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
+	}
+
+	@Override
+	public Git git() {
+		return mGit;
 	}
 
 }

@@ -1,5 +1,6 @@
 package net.typeblog.git.fragments;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.typeblog.git.adapters.CommitAdapter;
+import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.BuildConfig.DEBUG;
 
 public class CommitListFragment extends BaseListFragment<CommitAdapter>
@@ -22,6 +24,7 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter>
 	private static final String TAG = CommitListFragment.class.getSimpleName();
 	
 	private List<RevCommit> mList = new ArrayList<>();
+	private GitProvider mProvider;
 	
 	@Override
 	protected CommitAdapter createAdapter() {
@@ -42,20 +45,25 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter>
 		
 		new LoadTask().execute();
 	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		if (!(activity instanceof GitProvider)) {
+			throw new IllegalStateException("no provider");
+		}
+		
+		mProvider = (GitProvider) activity;
+	}
 	
 	private class LoadTask extends AsyncTask<Void, Void, List<RevCommit>> {
 
 		@Override
 		protected List<RevCommit> doInBackground(Void... params) {
 			try {
-				Repository repo = new FileRepositoryBuilder()
-					.setGitDir(new File(getArguments().getString("location") + "/.git"))
-					.readEnvironment()
-					.findGitDir()
-					.build();
-				Git git = new Git(repo);
 				List<RevCommit> ret = new ArrayList<>();
-				for (RevCommit commit : git.log().all().call()) {
+				for (RevCommit commit : mProvider.git().log().all().call()) {
 					
 					if (DEBUG) {
 						Log.d(TAG, "adding commit " + commit.getShortMessage());
