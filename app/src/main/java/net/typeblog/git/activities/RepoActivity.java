@@ -76,6 +76,7 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 		setupTabs(mPager);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
 		
 	}
 

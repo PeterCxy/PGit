@@ -51,6 +51,7 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 		Intent i = new Intent(Intent.ACTION_MAIN);
 		i.setClass(this, RepoActivity.class);
 		i.putExtra("location", mRepos.get(pos));
+		i.putExtra("name", mRepoNames.get(pos));
 		startActivity(i);
 	}
 	
