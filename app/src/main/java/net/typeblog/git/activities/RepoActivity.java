@@ -15,6 +15,7 @@ import java.io.IOException;
 import net.typeblog.git.R;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
+import net.typeblog.git.fragments.GitStatusFragment;
 import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.support.Utility.*;
 
@@ -26,6 +27,7 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 	private Fragment[] mFragments = {
 		new FileListFragment(),
 		new CommitListFragment(),
+		new GitStatusFragment()
 	};
 	
 	private ViewPager mPager;
@@ -51,6 +53,7 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 		
 		// Pager
 		mPager = $(this, R.id.pager);
+		mPager.setOffscreenPageLimit(Integer.MAX_VALUE);
 		
 		for (Fragment f : mFragments) {
 			f.setArguments(getIntent().getExtras());

@@ -16,10 +16,17 @@
 	<string-array name="repo_tabs">
 		<item>Files</item>
 		<item>Commits</item>
+		<item>Status</item>
 	</string-array>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
 	<string name="nothing">(○\'ω\'○)</string>
+	<string name="status_nothing">Nothing to commit, work directory clean.</string>
+	<string name="status_changes_to_commit">Changes to commit:</string>
+	<string name="status_untracked">Untracked files:</string>
+	<string name="status_modified">Modified files:</string>
+	<string name="status_deleted">Deleted files:</string>
+	<string name="status_conflicting">Conflicting files:</string>
 
 </resources>
