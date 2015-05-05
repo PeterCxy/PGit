@@ -13,9 +13,11 @@ import java.io.File;
 import java.io.IOException;
 
 import net.typeblog.git.R;
+import net.typeblog.git.fragments.BranchListFragment;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
 import net.typeblog.git.fragments.GitStatusFragment;
+import net.typeblog.git.fragments.TagListFragment;
 import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.support.Utility.*;
 
@@ -27,7 +29,9 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 	private Fragment[] mFragments = {
 		new FileListFragment(),
 		new CommitListFragment(),
-		new GitStatusFragment()
+		new GitStatusFragment(),
+		new BranchListFragment(),
+		new TagListFragment()
 	};
 	
 	private ViewPager mPager;

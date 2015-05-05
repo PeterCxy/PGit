@@ -17,6 +17,8 @@
 		<item>Files</item>
 		<item>Commits</item>
 		<item>Status</item>
+		<item>Branches</item>
+		<item>Tags</item>
 	</string-array>
 	
 	<!-- Messages -->
