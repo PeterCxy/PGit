@@ -5,6 +5,7 @@ import android.app.Activity;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
+import java.io.IOException;
 import java.util.Set;
 
 import net.typeblog.git.R;
@@ -29,6 +30,14 @@ public class GitStatusFragment extends BaseTextFragment
 			stat = mProvider.git().status().call();
 		} catch (GitAPIException e) {
 			return null;
+		}
+		
+		try {
+			sb.append(getString(R.string.status_branch_current))
+				.append(" ").append(mProvider.git().getRepository().getBranch())
+				.append("\n\n");
+		} catch (IOException e) {
+			
 		}
 		
 		if (stat.isClean()) {
