@@ -30,6 +30,7 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 	private List<String> mRepoUrls = new ArrayList<>();
 	private RepoAdapter mAdapter;
 	private ListView mList;
+	private View mAdd;
 
 	@Override
 	protected int getLayoutResource() {
@@ -40,10 +41,18 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 	protected void onInitView() {
 		//new AddRepoDialog().show();
 		mList = $(this, R.id.repo_list);
+		mAdd = $(this, R.id.fab);
 		mAdapter = new RepoAdapter(mRepoNames, mRepoUrls);
 		mList.setOnItemClickListener(this);
 		mList.setAdapter(mAdapter);
 		reload();
+		
+		mAdd.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new AddRepoDialog().show();
+			}
+		});
 	}
 
 	@Override
