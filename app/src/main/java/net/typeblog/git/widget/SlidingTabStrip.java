@@ -29,7 +29,7 @@ public class SlidingTabStrip extends LinearLayout {
 
 	private int mSelectedPosition;
 	private float mSelectionOffset;
-
+	
 	private SlidingTabLayout.TabColorizer mCustomTabColorizer;
 	private final SimpleTabColorizer mDefaultTabColorizer;
 
@@ -46,11 +46,13 @@ public class SlidingTabStrip extends LinearLayout {
 		TypedValue outValue = new TypedValue();
 		context.getTheme().resolveAttribute(R.attr.colorForeground, outValue, true);
 		final int themeForegroundColor =  outValue.data;
+		context.getTheme().resolveAttribute(net.typeblog.git.R.attr.colorPrimary, outValue, true);
+		int colorPrimary = outValue.data;
 
 		mDefaultBottomBorderColor = setColorAlpha(themeForegroundColor,
 												  DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
 
-		mDefaultTabColorizer = new SimpleTabColorizer();
+		mDefaultTabColorizer = new SimpleTabColorizer(colorPrimary);
 		mDefaultTabColorizer.setIndicatorColors(DEFAULT_SELECTED_INDICATOR_COLOR);
 
 		mBottomBorderThickness = (int) (DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS * density);
@@ -214,6 +216,11 @@ public class SlidingTabStrip extends LinearLayout {
 
 	public static class SimpleTabColorizer implements SlidingTabLayout.TabColorizer {
 		private int[] mIndicatorColors;
+		private int mColorPrimary;
+		
+		public SimpleTabColorizer(int colorPrimary) {
+			mColorPrimary = colorPrimary;
+		}
 
 		@Override
 		public int getIndicatorColor(int position) {
@@ -228,7 +235,7 @@ public class SlidingTabStrip extends LinearLayout {
 
 		@Override
 		public int getNormalTitleColor(int position) {
-			return blendColors(getSelectedTitleColor(position), Color.GRAY, 0.6f);
+			return blendColors(getSelectedTitleColor(position), mColorPrimary, 0.6f);
 		}
 
 		void setIndicatorColors(int... colors) {

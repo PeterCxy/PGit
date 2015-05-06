@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +46,7 @@ public abstract class ToolbarActivity extends AppCompatActivity
 		mTabs.setViewPager(pager);
 		
 		final int color = getResources().getColor(R.color.white);
-		mTabs.setCustomTabColorizer(new SlidingTabStrip.SimpleTabColorizer() {
+		mTabs.setCustomTabColorizer(new SlidingTabStrip.SimpleTabColorizer(getResources().getColor(R.color.color_primary)) {
 			@Override
 			public int getSelectedTitleColor(int position) {
 				return color;
@@ -54,6 +55,14 @@ public abstract class ToolbarActivity extends AppCompatActivity
 			@Override
 			public int getIndicatorColor(int position) {
 				return color;
+			}
+		});
+		
+		mTabs.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				mTabs.notifyIndicatorColorChanged();
+				mTabs.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
 		});
 	}
