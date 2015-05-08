@@ -2,6 +2,11 @@ package net.typeblog.git.fragments;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
 import java.text.Collator;
@@ -11,11 +16,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.typeblog.git.R;
 import net.typeblog.git.adapters.FileAdapter;
+import net.typeblog.git.support.GitProvider;
+import static net.typeblog.git.BuildConfig.DEBUG;
 
 public class FileListFragment extends BaseListFragment<FileAdapter, File>
 {
+	private static final String TAG = FileListFragment.class.getSimpleName();
+	
 	private String mRepo, mCurrent;
+	private GitProvider mProvider;
 
 	@Override
 	protected FileAdapter createAdapter() {
@@ -32,6 +43,7 @@ public class FileListFragment extends BaseListFragment<FileAdapter, File>
 		super.onAttach(activity);
 		mRepo = getArguments().getString("location");
 		mCurrent = mRepo;
+		mProvider = (GitProvider) activity;
 	}
 
 	@Override
@@ -47,6 +59,50 @@ public class FileListFragment extends BaseListFragment<FileAdapter, File>
 			mCurrent = f.getAbsolutePath();
 		}
 		reload();
+	}
+
+	@Override
+	protected boolean shouldEnterActionMode(int pos) {
+		return true;
+	}
+
+	@Override
+	protected int getActionModeMenu() {
+		return R.menu.action_mode_file;
+	}
+
+	@Override
+	protected boolean onActionModeItemSelected(int id) {
+		if (id == R.id.git_add) {
+			AddCommand add = mProvider.git().add();
+			SparseBooleanArray items = mList.getCheckedItemPositions();
+			for (int i = 0; i < items.size(); i++) {
+				int item = items.keyAt(i);
+				boolean checked = items.valueAt(i);
+				if (checked) {
+					String pattern = mItemList.get(item).getPath().replace(mRepo, "");
+					
+					if (pattern.startsWith("/"))
+						pattern = pattern.replaceFirst("/", "");
+					
+					add.addFilepattern(pattern);
+					
+					if (DEBUG) {
+						Log.d(TAG, pattern);
+					}
+				}
+			}
+			
+			try {
+				add.call();
+			} catch (GitAPIException e) {
+				
+			}
+			
+			return true;
+		} else {
+			return super.onActionModeItemSelected(id);
+		}
 	}
 
 	@Override

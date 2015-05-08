@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 
 import net.typeblog.git.R;
@@ -79,6 +80,10 @@ public abstract class ToolbarActivity extends AppCompatActivity
 		} else {
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	public ActionMode startMyActionMode(ActionMode.Callback callback) {
+		return startSupportActionMode(callback);
 	}
 	
 	protected abstract int getLayoutResource();
