@@ -92,4 +92,9 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 		return mGit;
 	}
 
+	@Override
+	public String getLocation() {
+		return getIntent().getStringExtra("location");
+	}
+
 }

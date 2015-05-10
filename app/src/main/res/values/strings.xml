@@ -21,6 +21,8 @@
 		<item>Tags</item>
 	</string-array>
 	<string name="git_add">Add</string>
+	<string name="git_push">Push</string>
+	<string name="push_force">Force</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
@@ -32,5 +34,7 @@
 	<string name="status_modified">Modified files:</string>
 	<string name="status_deleted">Deleted files:</string>
 	<string name="status_conflicting">Conflicting files:</string>
+	<string name="no_remotes">No remote found.</string>
+	<string name="wait">Please wait...</string>
 
 </resources>
