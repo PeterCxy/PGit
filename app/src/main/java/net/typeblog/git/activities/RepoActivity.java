@@ -1,6 +1,8 @@
 package net.typeblog.git.activities;
 
 import android.app.Fragment;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import android.support.v4.view.ViewPager;
 import android.support.v13.app.FragmentStatePagerAdapter;
@@ -13,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.typeblog.git.R;
+import net.typeblog.git.dialogs.GitPullDialog;
 import net.typeblog.git.fragments.BranchListFragment;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
@@ -95,6 +98,23 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 	@Override
 	public String getLocation() {
 		return getIntent().getStringExtra("location");
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.repo, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.pull:
+				new GitPullDialog(this, this).show();
+				return false;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

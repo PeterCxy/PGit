@@ -5,36 +5,35 @@ import android.content.Context;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ProgressMonitor;
 
+import java.io.IOException;
+
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
 import net.typeblog.git.support.RepoManager;
 import static net.typeblog.git.support.Utility.*;
 
-public class GitPushDialog extends BasePullPushDialog
+public class GitPullDialog extends BasePullPushDialog
 {
-	public GitPushDialog(Context context, GitProvider provider, String ref) {
-		super(context, provider, ref);
+	public GitPullDialog(Context context, GitProvider provider) {
+		super(context, provider, null);
 	}
-	
+
 	@Override
 	protected void onInitView() {
-		setTitle(R.string.git_push);
+		setTitle(R.string.git_pull);
 		super.onInitView();
 	}
 
 	@Override
 	protected void doTask(ProgressMonitor monitor, String remote, String ref, String username, String passwd, boolean force) {
 		try {
-			mProvider.git().push()
-				.setRemote(remote)
-				.add(ref)
-				.setPushTags()
-				.setForce(force)
-				.setProgressMonitor(monitor)
-				.call();
+			mProvider.git().pull()
+					.setRemote(remote)
+					.setProgressMonitor(monitor)
+					.call();
 		} catch (GitAPIException e) {
 			
 		}
 	}
-	
+
 }

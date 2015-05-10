@@ -23,6 +23,7 @@
 	<string name="git_add">Add</string>
 	<string name="git_push">Push</string>
 	<string name="push_force">Force</string>
+	<string name="git_pull">Pull</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
