@@ -54,11 +54,11 @@ public class FileListFragment extends BaseListFragment<FileAdapter, File>
 		if (!f.isDirectory() || f.getName().equals(".git")) return;
 		
 		if (f.getAbsolutePath().endsWith("..")) {
-			mCurrent = new File(mCurrent).getParentFile().getAbsolutePath();
+			goBack();
 		} else {
 			mCurrent = f.getAbsolutePath();
+			reload();
 		}
-		reload();
 	}
 
 	@Override
@@ -111,9 +111,18 @@ public class FileListFragment extends BaseListFragment<FileAdapter, File>
 		list.addAll(Arrays.asList(files));
 		Collections.sort(list, new FileComparator());
 
-		if (!new File(mCurrent).equals(new File(mRepo))) {
+		if (canGoBack()) {
 			list.add(0, new File(mCurrent + "/.."));
 		}
+	}
+	
+	public void goBack() {
+		mCurrent = new File(mCurrent).getParentFile().getAbsolutePath();
+		reload();
+	}
+	
+	public boolean canGoBack() {
+		return !new File(mCurrent).equals(new File(mRepo));
 	}
 	
 	private class FileComparator implements Comparator<File> {

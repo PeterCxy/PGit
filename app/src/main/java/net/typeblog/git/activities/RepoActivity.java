@@ -103,6 +103,22 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 	}
 
 	@Override
+	public void onBackPressed() {
+		int cur = mPager.getCurrentItem();
+		if (mFragments[cur] instanceof FileListFragment) {
+			FileListFragment f = (FileListFragment) mFragments[cur];
+			
+			if (f.canGoBack()) {
+				f.goBack();
+			} else {
+				super.onBackPressed();
+			}
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.repo, menu);
 		return true;
