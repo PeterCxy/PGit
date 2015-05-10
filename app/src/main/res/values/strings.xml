@@ -19,6 +19,7 @@
 		<item>Status</item>
 		<item>Branches</item>
 		<item>Tags</item>
+		<item>Remotes</item>
 	</string-array>
 	<string name="git_add">Add</string>
 	<string name="git_push">Push</string>
