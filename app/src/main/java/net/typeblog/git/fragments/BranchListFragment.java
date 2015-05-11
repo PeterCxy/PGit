@@ -52,6 +52,7 @@ public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 				return true;
 			case R.id.track_remote:
 				new RemoteTrackDialog(getActivity(), mProvider, selected).show();
+				return true;
 			default:
 				return super.onActionModeItemSelected(id);
 		}
