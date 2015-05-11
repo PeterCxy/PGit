@@ -31,7 +31,7 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 
 	private List<String> mRemotes = new ArrayList<>();
 
-	private CheckBox mForce;
+	protected CheckBox mForce;
 	private ListView mList;
 	private TextView mUserName, mPassword;
 	

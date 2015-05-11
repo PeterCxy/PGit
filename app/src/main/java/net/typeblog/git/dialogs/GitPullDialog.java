@@ -1,6 +1,7 @@
 package net.typeblog.git.dialogs;
 
 import android.content.Context;
+import android.view.View;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ProgressMonitor;
@@ -23,6 +24,9 @@ public class GitPullDialog extends BasePullPushDialog
 	protected void onInitView() {
 		setTitle(R.string.git_pull);
 		super.onInitView();
+		
+		// Disable force for pull (for now)
+		mForce.setVisibility(View.GONE);
 	}
 
 	@Override
