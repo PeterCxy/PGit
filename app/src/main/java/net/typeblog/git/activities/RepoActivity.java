@@ -21,6 +21,7 @@ import net.typeblog.git.fragments.BranchListFragment;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
 import net.typeblog.git.fragments.GitStatusFragment;
+import net.typeblog.git.fragments.RemoteBranchListFragment;
 import net.typeblog.git.fragments.RemoteListFragment;
 import net.typeblog.git.fragments.TagListFragment;
 import net.typeblog.git.support.GitProvider;
@@ -37,7 +38,8 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 		new GitStatusFragment(),
 		new BranchListFragment(),
 		new TagListFragment(),
-		new RemoteListFragment()
+		new RemoteListFragment(),
+		new RemoteBranchListFragment()
 	};
 	
 	private ViewPager mPager;

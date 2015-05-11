@@ -2,6 +2,7 @@ package net.typeblog.git.fragments;
 
 import android.app.Activity;
 
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 
@@ -66,10 +67,14 @@ public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 	@Override
 	protected void doLoad(List<Ref> list) {
 		try {
-			list.addAll(mProvider.git().branchList().call());
+			list.addAll(mProvider.git().branchList().setListMode(getListMode()).call());
 		} catch (GitAPIException e) {
 			
 		}
+	}
+	
+	protected ListBranchCommand.ListMode getListMode() {
+		return null;
 	}
 
 }
