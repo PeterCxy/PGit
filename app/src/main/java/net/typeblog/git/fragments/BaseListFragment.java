@@ -43,6 +43,9 @@ public abstract class BaseListFragment<A extends BaseAdapter, I> extends Fragmen
 	protected boolean onActionModeItemSelected(int id) {
 		return false;
 	}
+	protected boolean multiChoice() {
+		return true;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public abstract class BaseListFragment<A extends BaseAdapter, I> extends Fragmen
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 					getActivity().getMenuInflater().inflate(getActionModeMenu(), menu);
-					mList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+					mList.setChoiceMode(multiChoice() ? AbsListView.CHOICE_MODE_MULTIPLE : AbsListView.CHOICE_MODE_SINGLE);
 					mList.setItemChecked(position, true);
 					mList.setOnItemClickListener(null);
 					mList.setOnItemLongClickListener(null);

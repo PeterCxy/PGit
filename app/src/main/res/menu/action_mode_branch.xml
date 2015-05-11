@@ -7,4 +7,9 @@
 		android:title="@string/git_push"
 		app:showAsAction="never"/>
 	
+	<item
+		android:id="@+id/track_remote"
+		android:title="@string/track_remote"
+		app:showAsAction="never"/>
+	
 </menu>

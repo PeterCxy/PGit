@@ -10,6 +10,7 @@ import java.util.List;
 import net.typeblog.git.R;
 import net.typeblog.git.adapters.RefAdapter;
 import net.typeblog.git.dialogs.GitPushDialog;
+import net.typeblog.git.dialogs.RemoteTrackDialog;
 import net.typeblog.git.support.GitProvider;
 
 public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
@@ -44,12 +45,21 @@ public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 
 	@Override
 	protected boolean onActionModeItemSelected(int id) {
-		if (id == R.id.push) {
-			new GitPushDialog(getActivity(), mProvider, "refs/heads/master").show();
-			return true;
-		} else {
-			return super.onActionModeItemSelected(id);
+		String selected = mItemList.get(mList.getCheckedItemPosition()).getName();
+		switch (id) {
+			case R.id.push:
+				new GitPushDialog(getActivity(), mProvider, selected).show();
+				return true;
+			case R.id.track_remote:
+				new RemoteTrackDialog(getActivity(), mProvider, selected).show();
+			default:
+				return super.onActionModeItemSelected(id);
 		}
+	}
+
+	@Override
+	protected boolean multiChoice() {
+		return false;
 	}
 
 	@Override
