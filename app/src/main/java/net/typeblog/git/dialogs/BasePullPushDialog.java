@@ -13,6 +13,8 @@ import android.widget.Toast;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 	private ListView mList;
 	private TextView mUserName, mPassword;
 	
-	protected abstract void doTask(ProgressMonitor monitor, String remote, String ref, String username, String passwd, boolean force);
+	protected abstract void doTask(ProgressMonitor monitor, String remote, String ref, CredentialsProvider authorization, boolean force);
 
 	public BasePullPushDialog(Context context, GitProvider provider, String ref) {
 		super(context);
@@ -131,7 +133,7 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 				public boolean isCancelled() {
 					return false;
 				}	
-			}, mRemote, mRef, mName, mPass, mForce.isChecked());
+			}, mRemote, mRef, new UsernamePasswordCredentialsProvider(mName, mPass), mForce.isChecked());
 			/*try {
 				
 			} catch (GitAPIException e) {

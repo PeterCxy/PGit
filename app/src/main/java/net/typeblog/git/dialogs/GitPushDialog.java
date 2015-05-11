@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.transport.CredentialsProvider;
 
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
@@ -23,11 +24,12 @@ public class GitPushDialog extends BasePullPushDialog
 	}
 
 	@Override
-	protected void doTask(ProgressMonitor monitor, String remote, String ref, String username, String passwd, boolean force) {
+	protected void doTask(ProgressMonitor monitor, String remote, String ref, CredentialsProvider authorization, boolean force) {
 		try {
 			mProvider.git().push()
 				.setRemote(remote)
 				.add(ref)
+				.setCredentialsProvider(authorization)
 				.setPushTags()
 				.setForce(force)
 				.setProgressMonitor(monitor)
