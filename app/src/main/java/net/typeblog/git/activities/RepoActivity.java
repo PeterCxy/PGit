@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import net.typeblog.git.R;
 import net.typeblog.git.dialogs.GitPullDialog;
+import net.typeblog.git.dialogs.RemoteAddDialog;
 import net.typeblog.git.fragments.BranchListFragment;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
@@ -129,7 +130,10 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 		switch (item.getItemId()) {
 			case R.id.pull:
 				new GitPullDialog(this, this).show();
-				return false;
+				return true;
+			case R.id.add_remote:
+				new RemoteAddDialog(this, this).show();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
