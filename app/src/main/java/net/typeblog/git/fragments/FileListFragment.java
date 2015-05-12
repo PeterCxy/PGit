@@ -74,6 +74,7 @@ public class FileListFragment extends BaseListFragment<FileAdapter, File>
 	@Override
 	protected boolean onActionModeItemSelected(int id) {
 		if (id == R.id.git_add) {
+			// TODO: Should be done in an AsyncTask
 			AddCommand add = mProvider.git().add();
 			SparseBooleanArray items = mList.getCheckedItemPositions();
 			for (int i = 0; i < items.size(); i++) {
