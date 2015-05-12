@@ -21,7 +21,7 @@ public class RemoteTrackDialog extends ToolbarDialog
 	private List<String> mRemotes = new ArrayList<>();
 	private GitProvider mProvider;
 	private ListView mList;
-	private String mBranch;
+	private String mBranch, mShortBranch;
 	
 	public RemoteTrackDialog(Context context, GitProvider provider, String branch) {
 		super(context);
@@ -41,6 +41,7 @@ public class RemoteTrackDialog extends ToolbarDialog
 		mList = $(this, R.id.remotes);
 
 		mRemotes.addAll(mProvider.git().getRepository().getRemoteNames());
+		mRemotes.add(0, getContext().getString(R.string.none));
 
 		if (mRemotes.size() == 0) {
 			Toast.makeText(getContext(), R.string.no_remotes, Toast.LENGTH_SHORT).show();
@@ -52,25 +53,39 @@ public class RemoteTrackDialog extends ToolbarDialog
 			});
 			return;
 		}
+		
+		// Load tracking branch
+		mShortBranch = mBranch.replace("refs/heads/", "");
+		StoredConfig conf = mProvider.git().getRepository().getConfig();
+		String trakcing = conf.getString("branch", mShortBranch, "remote");
+		int index = mRemotes.indexOf(trakcing);
+		if (index < 0) index = 0;
 
 		mList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		mList.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.item_with_radio, R.id.item_name, mRemotes));
-		mList.setItemChecked(0, true);
+		mList.setItemChecked(index, true);
 	}
 
 	@Override
 	protected void onConfirm() {
-		String remote = mRemotes.get(mList.getCheckedItemPosition());
-		String shortName = mBranch.replace("refs/heads/", "");
+		int pos = mList.getCheckedItemPosition();
 		
 		StoredConfig conf = mProvider.git().getRepository().getConfig();
-		conf.setString("branch", shortName, "remote", remote);
-		conf.setString("branch", shortName, "merge", mBranch);
+		
+		if (pos == 0) {
+			conf.unset("branch", mShortBranch, "remote");
+			conf.unset("branch", mShortBranch, "merge");
+		} else {
+			String remote = mRemotes.get(pos);
+			
+			conf.setString("branch", mShortBranch, "remote", remote);
+			conf.setString("branch", mShortBranch, "merge", mBranch);
+		}
 		
 		try {
 			conf.save();
 		} catch (IOException e) {
-			
+
 		}
 		
 		dismiss();
