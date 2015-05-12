@@ -31,6 +31,10 @@
 	<string name="remote_url">Remote url</string>
 	<string name="track_remote">Set track remote</string>
 	<string name="none">None</string>
+	<string name="git_commit">Commit</string>
+	<string name="commit_message">Message</string>
+	<string name="commit_all">All</string>
+	<string name="commit_amend">Amend</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
@@ -43,6 +47,8 @@
 	<string name="status_deleted">Deleted files:</string>
 	<string name="status_conflicting">Conflicting files:</string>
 	<string name="no_remotes">No remote found.</string>
+	<string name="no_modify">No modifications found.</string>
+	<string name="no_message">Message cannot be empty.</string>
 	<string name="wait">Please wait...</string>
 
 </resources>

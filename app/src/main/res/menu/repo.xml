@@ -2,6 +2,11 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
     
+	<item
+		android:id="@+id/commit"
+		android:title="@string/git_commit"
+		app:showAsAction="never"/>
+	
     <item
 		android:id="@+id/pull"
 		android:title="@string/git_pull"
