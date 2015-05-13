@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -15,8 +16,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.typeblog.git.R;
 import net.typeblog.git.adapters.CommitAdapter;
 import net.typeblog.git.support.GitProvider;
+import static net.typeblog.git.support.Utility.*;
 import static net.typeblog.git.BuildConfig.DEBUG;
 
 public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommit>
@@ -44,6 +47,32 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommi
 		}
 		
 		mProvider = (GitProvider) activity;
+	}
+
+	@Override
+	protected boolean shouldEnterActionMode(int pos) {
+		return true;
+	}
+
+	@Override
+	protected boolean multiChoice() {
+		return false;
+	}
+
+	@Override
+	protected int getActionModeMenu() {
+		return R.menu.action_mode_commits;
+	}
+
+	@Override
+	protected boolean onActionModeItemSelected(int id) {
+		switch (id) {
+			case R.id.copy_commit_id:
+				copyToClipboard(ObjectId.toString(mItemList.get(mList.getCheckedItemPosition()).getId()));
+				return true;
+			default:
+				return super.onActionModeItemSelected(id);
+		}
 	}
 
 	@Override

@@ -41,6 +41,7 @@
 	<string name="commit_all">All</string>
 	<string name="commit_amend">Amend</string>
 	<string name="git_clean_all">Clean All</string>
+	<string name="copy_commit_id">Copy Id</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
@@ -56,5 +57,6 @@
 	<string name="no_modify">No modifications found.</string>
 	<string name="no_message">Message cannot be empty.</string>
 	<string name="wait">Please wait...</string>
+	<string name="copied">Copied to clipboard</string>
 
 </resources>
