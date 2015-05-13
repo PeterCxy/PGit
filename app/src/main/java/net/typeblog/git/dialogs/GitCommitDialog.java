@@ -58,13 +58,9 @@ public class GitCommitDialog extends ToolbarDialog
 		
 		if (mUncommitted.size() == 0) {
 			Toast.makeText(getContext(), R.string.no_modify, Toast.LENGTH_SHORT).show();
-			mList.post(new Runnable() {
-				@Override
-				public void run() {
-					dismiss();
-				}
-			});
-			return;
+			mList.setVisibility(View.GONE);
+			mAll.setVisibility(View.GONE);
+			mAmend.setChecked(true);
 		}
 		
 		mList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
