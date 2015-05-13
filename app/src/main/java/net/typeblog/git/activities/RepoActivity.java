@@ -1,6 +1,8 @@
 package net.typeblog.git.activities;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -8,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
@@ -140,8 +143,42 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 			case R.id.add_remote:
 				new RemoteAddDialog(this, this).show();
 				return true;
+			case R.id.clean_all:
+				new CleanAllTask().execute();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	private class CleanAllTask extends AsyncTask<Void, Void, Void> {
+		private ProgressDialog progress;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progress = new ProgressDialog(RepoActivity.this);
+			progress.setCancelable(false);
+			progress.setMessage(getString(R.string.wait));
+			progress.show();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				mGit.reset().call();
+				mGit.stashCreate().call();
+				mGit.clean().call();
+			} catch (GitAPIException e) {
+				throw new RuntimeException(e);
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			progress.dismiss();
 		}
 	}
 

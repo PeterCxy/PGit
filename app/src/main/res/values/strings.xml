@@ -40,6 +40,7 @@
 	<string name="commit_message">Message</string>
 	<string name="commit_all">All</string>
 	<string name="commit_amend">Amend</string>
+	<string name="git_clean_all">Clean All</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
