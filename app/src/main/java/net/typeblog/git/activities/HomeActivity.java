@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import android.support.v7.widget.AppCompatEditText;
@@ -62,6 +64,23 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 		i.putExtra("location", mRepos.get(pos));
 		i.putExtra("name", mRepoNames.get(pos));
 		startActivity(i);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.home, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.committer:
+				new CommitterDialog().show();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	private void reload() {
@@ -131,5 +150,37 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 				reload();
 			}
 		}
+	}
+	
+	private class CommitterDialog extends ToolbarDialog {
+		EditText name, email;
+		
+		CommitterDialog() {
+			super(HomeActivity.this);
+		}
+		
+		@Override
+		protected int getLayoutResource() {
+			return R.layout.set_committer;
+		}
+
+		@Override
+		protected void onInitView() {
+			setTitle(R.string.committer);
+			
+			name = $(this, R.id.committer_name);
+			email = $(this, R.id.committer_email);
+			
+			name.setText(RepoManager.getInstance().getCommitterName());
+			email.setText(RepoManager.getInstance().getCommitterEmail());
+		}
+
+		@Override
+		protected void onConfirm() {
+			RepoManager.getInstance().setCommitterIdentity(name.getText().toString().trim(), email.getText().toString().trim());
+			dismiss();
+		}
+
+		
 	}
 }

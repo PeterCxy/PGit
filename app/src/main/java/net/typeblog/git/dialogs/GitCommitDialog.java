@@ -21,6 +21,7 @@ import java.util.List;
 
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
+import net.typeblog.git.support.RepoManager;
 import static net.typeblog.git.support.Utility.*;
 
 public class GitCommitDialog extends ToolbarDialog
@@ -125,8 +126,9 @@ public class GitCommitDialog extends ToolbarDialog
 
 				}
 
-				// TODO: Remove this. Do not use root as committer.
-				commit.setCommitter("root", "root@localhost");
+				// Committer
+				RepoManager m = RepoManager.getInstance();
+				commit.setCommitter(m.getCommitterName(), m.getCommitterEmail());
 
 				try {
 					commit.call();

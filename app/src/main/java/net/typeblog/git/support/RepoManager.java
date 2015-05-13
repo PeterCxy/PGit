@@ -13,6 +13,8 @@ public class RepoManager
 	private static final String LOCATIONS = "locations";
 	private static final String URL = "url";
 	private static final String AUTH_PASS = "auth_pass";
+	private static final String COMMITTER_NAME = "name";
+	private static final String COMMITTER_EMAIL = "email";
 	private static final String SEPERATOR = ",";
 	
 	private static RepoManager sInstance;
@@ -61,5 +63,29 @@ public class RepoManager
 	
 	public String[] getAuthPass(String location) {
 		return mPref.getString(location + SEPERATOR + AUTH_PASS, "").split(SEPERATOR);
+	}
+	
+	public void setCommitterIdentity(String name, String email) {
+		mPref.edit().putString(COMMITTER_NAME, name)
+					.putString(COMMITTER_EMAIL, email)
+					.commit();
+	}
+	
+	public String getCommitterName() {
+		String ret = mPref.getString(COMMITTER_NAME, "");
+		if (ret.equals("")) {
+			return "root";
+		} else {
+			return ret;
+		}
+	}
+	
+	public String getCommitterEmail() {
+		String ret = mPref.getString(COMMITTER_EMAIL, "");
+		if (ret.equals("")) {
+			return "root@localhost";
+		} else {
+			return ret;
+		}
 	}
 }

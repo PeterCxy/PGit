@@ -12,6 +12,11 @@
 	<string name="password">Password (Optional)</string>
 	<string name="finish">OK</string>
 	
+	<!-- Home -->
+	<string name="committer">Committer</string>
+	<string name="committer_name">Name</string>
+	<string name="committer_email">Email</string>
+	
 	<!-- Repo -->
 	<string-array name="repo_tabs">
 		<item>Files</item>
