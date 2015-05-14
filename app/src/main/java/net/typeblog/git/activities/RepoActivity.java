@@ -145,6 +145,7 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 				new RemoteAddDialog(this, this).show();
 				return true;
 			case R.id.clean_all:
+				// TODO Add a confirm dialog
 				new CleanAllTask().execute();
 				return true;
 			case R.id.branch_create:
