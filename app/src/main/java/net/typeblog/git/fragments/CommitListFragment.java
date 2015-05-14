@@ -18,6 +18,7 @@ import java.util.List;
 
 import net.typeblog.git.R;
 import net.typeblog.git.adapters.CommitAdapter;
+import net.typeblog.git.dialogs.GitRevertDialog;
 import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.support.Utility.*;
 import static net.typeblog.git.BuildConfig.DEBUG;
@@ -66,9 +67,15 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommi
 
 	@Override
 	protected boolean onActionModeItemSelected(int id) {
+		RevCommit commit = mItemList.get(mList.getCheckedItemPosition());
+		String commitId = ObjectId.toString(commit.getId());
+		String shortMessage = commit.getShortMessage();
 		switch (id) {
 			case R.id.copy_commit_id:
-				copyToClipboard(ObjectId.toString(mItemList.get(mList.getCheckedItemPosition()).getId()));
+				copyToClipboard(commitId);
+				return true;
+			case R.id.revert:
+				new GitRevertDialog(getActivity(), mProvider, commit, shortMessage).show();
 				return true;
 			default:
 				return super.onActionModeItemSelected(id);

@@ -42,6 +42,7 @@
 	<string name="commit_amend">Amend</string>
 	<string name="git_clean_all">Clean All</string>
 	<string name="copy_commit_id">Copy Id</string>
+	<string name="git_revert">Revert</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>

@@ -6,5 +6,10 @@
 		android:id="@+id/copy_commit_id"
 		android:title="@string/copy_commit_id"
 		app:showAsAction="never"/>
+	
+	<item
+		android:id="@+id/revert"
+		android:title="@string/git_revert"
+		app:showAsAction="never"/>
     
 </menu>
