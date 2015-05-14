@@ -1,6 +1,7 @@
 package net.typeblog.git.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -77,6 +78,13 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommi
 			case R.id.revert:
 				new GitRevertDialog(getActivity(), mProvider, commit, shortMessage).show();
 				return true;
+			case R.id.reset_to:
+				showConfirmDialog(
+					getActivity(),
+					String.format(getString(R.string.reset_to_confirm), commitId),
+					new ResetToTask(),
+					new String[]{commitId});
+				return true;
 			default:
 				return super.onActionModeItemSelected(id);
 		}
@@ -97,6 +105,39 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommi
 			Log.e(TAG, Log.getStackTraceString(e));
 		} catch (GitAPIException e) {
 			Log.e(TAG, Log.getStackTraceString(e));
+		}
+	}
+	
+	private class ResetToTask extends AsyncTask<String, Void, Void> {
+		private ProgressDialog progress;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+			progress = new ProgressDialog(getActivity());
+			progress.setCancelable(false);
+			progress.setMessage(getString(R.string.wait));
+			progress.show();
+		}
+		
+		@Override
+		protected Void doInBackground(String... params) {
+			try {
+				mProvider.git().reset()
+					.setRef(params[0])
+					.call();
+			} catch (GitAPIException e) {
+				
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			
+			progress.dismiss();
 		}
 	}
 }

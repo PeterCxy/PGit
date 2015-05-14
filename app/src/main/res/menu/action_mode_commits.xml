@@ -11,5 +11,10 @@
 		android:id="@+id/revert"
 		android:title="@string/git_revert"
 		app:showAsAction="never"/>
+	
+	<item
+		android:id="@+id/reset_to"
+		android:title="@string/git_reset_to"
+		app:showAsAction="never"/>
     
 </menu>
