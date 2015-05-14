@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.typeblog.git.R;
+import net.typeblog.git.dialogs.BranchCreateDialog;
 import net.typeblog.git.dialogs.GitCommitDialog;
 import net.typeblog.git.dialogs.GitPullDialog;
 import net.typeblog.git.dialogs.RemoteAddDialog;
@@ -145,6 +146,9 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 				return true;
 			case R.id.clean_all:
 				new CleanAllTask().execute();
+				return true;
+			case R.id.branch_create:
+				new BranchCreateDialog(this, this).show();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);

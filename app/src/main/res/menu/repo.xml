@@ -18,6 +18,11 @@
 		app:showAsAction="never"/>
 	
 	<item
+		android:id="@+id/branch_create"
+		android:title="@string/git_branch_create"
+		app:showAsAction="never"/>
+	
+	<item
 		android:id="@+id/clean_all"
 		android:title="@string/git_clean_all"
 		app:showAsAction="never"/>
