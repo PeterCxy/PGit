@@ -46,6 +46,7 @@
 	<string name="git_reset_to">Reset to</string>
 	<string name="git_branch_create">Create branch</string>
 	<string name="branch_name">Name</string>
+	<string name="git_checkout">Checkout</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>
@@ -63,6 +64,7 @@
 	<string name="wait">Please wait...</string>
 	<string name="copied">Copied to clipboard</string>
 	<string name="reset_to_confirm">Really want to reset to %s?\n\nTHIS CANNOT BE REVERTED.</string>
+	<string name="checkout_confirm">Checkout %s?</string>
 	<string name="illegal_name">Illegal name of an object</string>
 
 </resources>

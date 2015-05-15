@@ -8,6 +8,11 @@
 		app:showAsAction="never"/>
 	
 	<item
+		android:id="@+id/checkout"
+		android:title="@string/git_checkout"
+		app:showAsAction="never"/>
+	
+	<item
 		android:id="@+id/track_remote"
 		android:title="@string/track_remote"
 		app:showAsAction="never"/>
