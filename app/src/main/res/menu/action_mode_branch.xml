@@ -13,6 +13,11 @@
 		app:showAsAction="never"/>
 	
 	<item
+		android:id="@+id/delete"
+		android:title="@string/git_branch_delete"
+		app:showAsAction="never"/>
+	
+	<item
 		android:id="@+id/track_remote"
 		android:title="@string/track_remote"
 		app:showAsAction="never"/>

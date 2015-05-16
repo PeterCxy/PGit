@@ -45,6 +45,7 @@
 	<string name="git_revert">Revert</string>
 	<string name="git_reset_to">Reset to</string>
 	<string name="git_branch_create">Create branch</string>
+	<string name="git_branch_delete">Delete</string>
 	<string name="branch_name">Name</string>
 	<string name="git_checkout">Checkout</string>
 	
@@ -65,6 +66,7 @@
 	<string name="copied">Copied to clipboard</string>
 	<string name="reset_to_confirm">Really want to reset to %s?\n\nTHIS CANNOT BE REVERTED.</string>
 	<string name="checkout_confirm">Checkout %s?</string>
+	<string name="delete_confirm">Delete %s?</string>
 	<string name="illegal_name">Illegal name of an object</string>
 
 </resources>

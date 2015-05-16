@@ -64,6 +64,13 @@ public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 					new CheckoutTask(),
 					new String[]{selected});
 				return true;
+			case R.id.delete:
+				showConfirmDialog(
+					getActivity(),
+					String.format(getString(R.string.delete_confirm), selected),
+					new DeleteTask(),
+					new String[]{selected});
+				return true;
 			default:
 				return super.onActionModeItemSelected(id);
 		}
@@ -118,6 +125,38 @@ public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 			progress.dismiss();
 		}
 
+	}
+	
+	private class DeleteTask extends AsyncTask<String, Void, Void> {
+		ProgressDialog progress;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+
+			progress = new ProgressDialog(getActivity());
+			progress.setMessage(getString(R.string.wait));
+			progress.show();
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			try {
+				mProvider.git().branchDelete()
+					.setBranchNames(params[0])
+					.call();
+			} catch (GitAPIException e) {
+
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+
+			progress.dismiss();
+		}
 	}
 
 }
