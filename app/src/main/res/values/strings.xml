@@ -48,6 +48,7 @@
 	<string name="git_branch_delete">Delete</string>
 	<string name="branch_name">Name</string>
 	<string name="git_checkout">Checkout</string>
+	<string name="git_tag_create">Create tag</string>
 	
 	<!-- Messages -->
 	<string name="exist_no_git">Directory exists but not a git repo</string>

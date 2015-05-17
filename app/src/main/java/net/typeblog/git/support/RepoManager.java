@@ -3,6 +3,8 @@ package net.typeblog.git.support;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.eclipse.jgit.lib.PersonIdent;
+
 import java.io.File;
 
 import net.typeblog.git.R;
@@ -87,5 +89,9 @@ public class RepoManager
 		} else {
 			return ret;
 		}
+	}
+	
+	public PersonIdent getCommitterIdent() {
+		return new PersonIdent(getCommitterName(), getCommitterEmail());
 	}
 }

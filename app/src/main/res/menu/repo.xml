@@ -23,6 +23,11 @@
 		app:showAsAction="never"/>
 	
 	<item
+		android:id="@+id/tag_create"
+		android:title="@string/git_tag_create"
+		app:showAsAction="never"/>
+	
+	<item
 		android:id="@+id/clean_all"
 		android:title="@string/git_clean_all"
 		app:showAsAction="never"/>

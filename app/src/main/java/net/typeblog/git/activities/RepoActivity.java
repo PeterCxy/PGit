@@ -21,6 +21,7 @@ import net.typeblog.git.dialogs.BranchCreateDialog;
 import net.typeblog.git.dialogs.GitCommitDialog;
 import net.typeblog.git.dialogs.GitPullDialog;
 import net.typeblog.git.dialogs.RemoteAddDialog;
+import net.typeblog.git.dialogs.TagCreateDialog;
 import net.typeblog.git.fragments.BranchListFragment;
 import net.typeblog.git.fragments.CommitListFragment;
 import net.typeblog.git.fragments.FileListFragment;
@@ -153,6 +154,9 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 				return true;
 			case R.id.branch_create:
 				new BranchCreateDialog(this, this).show();
+				return true;
+			case R.id.tag_create:
+				new TagCreateDialog(this, this).show();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
