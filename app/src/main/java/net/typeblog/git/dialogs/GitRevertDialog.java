@@ -11,6 +11,7 @@ import org.eclipse.jgit.lib.ObjectId;
 
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
+import net.typeblog.git.support.RepoManager;
 import net.typeblog.git.tasks.GitTask;
 import static net.typeblog.git.support.Utility.*;
 
@@ -57,9 +58,22 @@ public class GitRevertDialog extends ToolbarDialog
 		
 		@Override
 		protected void doGitTask(GitProvider provider, Void... params) throws GitAPIException, RuntimeException {
+			RepoManager m = RepoManager.getInstance();
+			String message = mMessage.getText().toString();
+			String username = m.getCommitterName();
+			String email = m.getCommitterEmail();
+			
 			provider.git().revert()
 				.include(mCommit)
-				.setOurCommitName(mMessage.getText().toString())
+				.setOurCommitName(message)
+				.call();
+			
+			// Dirty hack: Do not know how to set committer identity 
+			provider.git().commit()
+				.setAmend(true)
+				.setMessage(message)
+				.setCommitter(username, email)
+				.setAuthor(username, email)
 				.call();
 		}
 
