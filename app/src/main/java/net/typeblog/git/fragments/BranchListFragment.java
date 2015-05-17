@@ -15,6 +15,7 @@ import net.typeblog.git.adapters.RefAdapter;
 import net.typeblog.git.dialogs.GitPushDialog;
 import net.typeblog.git.dialogs.RemoteTrackDialog;
 import net.typeblog.git.support.GitProvider;
+import net.typeblog.git.tasks.GitTask;
 import static net.typeblog.git.support.Utility.*;
 
 public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
@@ -94,69 +95,34 @@ public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 		return null;
 	}
 	
-	private class CheckoutTask extends AsyncTask<String, Void, Void> {
-		ProgressDialog progress;
+	private class CheckoutTask extends GitTask<String> {
 		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			
-			progress = new ProgressDialog(getActivity());
-			progress.setMessage(getString(R.string.wait));
-			progress.show();
+		public CheckoutTask() {
+			super(getActivity(), mProvider);
 		}
 		
 		@Override
-		protected Void doInBackground(String... params) {
-			try {
-				mProvider.git().checkout()
-					.setName(params[0])
-					.call();
-			} catch (GitAPIException e) {
-				
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			
-			progress.dismiss();
+		protected void doGitTask(GitProvider provider, String... params) throws GitAPIException, RuntimeException {
+			provider.git().checkout()
+				.setName(params[0])
+				.call();
 		}
 
 	}
 	
-	private class DeleteTask extends AsyncTask<String, Void, Void> {
-		ProgressDialog progress;
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-			progress = new ProgressDialog(getActivity());
-			progress.setMessage(getString(R.string.wait));
-			progress.show();
+	private class DeleteTask extends GitTask<String> {
+		
+		public DeleteTask() {
+			super(getActivity(), mProvider);
 		}
 
 		@Override
-		protected Void doInBackground(String... params) {
-			try {
-				mProvider.git().branchDelete()
-					.setBranchNames(params[0])
-					.call();
-			} catch (GitAPIException e) {
-
-			}
-			return null;
+		protected void doGitTask(GitProvider provider, String... params) throws GitAPIException, RuntimeException{
+			mProvider.git().branchDelete()
+				.setBranchNames(params[0])
+				.call();
 		}
 
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-
-			progress.dismiss();
-		}
 	}
 
 }

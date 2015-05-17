@@ -2,7 +2,6 @@ package net.typeblog.git.activities;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,6 +28,7 @@ import net.typeblog.git.fragments.GitStatusFragment;
 import net.typeblog.git.fragments.RemoteBranchListFragment;
 import net.typeblog.git.fragments.RemoteListFragment;
 import net.typeblog.git.fragments.TagListFragment;
+import net.typeblog.git.tasks.GitTask;
 import net.typeblog.git.support.GitProvider;
 import static net.typeblog.git.support.Utility.*;
 
@@ -156,34 +156,17 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 		}
 	}
 	
-	private class CleanAllTask extends AsyncTask<Void, Void, Void> {
-		private ProgressDialog progress;
+	private class CleanAllTask extends GitTask<Void> {
 		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			progress = new ProgressDialog(RepoActivity.this);
-			progress.setCancelable(false);
-			progress.setMessage(getString(R.string.wait));
-			progress.show();
-		}
-		
-		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				mGit.reset().call();
-				mGit.stashCreate().call();
-				mGit.clean().call();
-			} catch (GitAPIException e) {
-				throw new RuntimeException(e);
-			}
-			return null;
+		public CleanAllTask() {
+			super(RepoActivity.this, RepoActivity.this);
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			progress.dismiss();
+		protected void doGitTask(GitProvider provider, Void... params) throws GitAPIException, RuntimeException {
+			mGit.reset().call();
+			mGit.stashCreate().call();
+			mGit.clean().call();
 		}
 	}
 

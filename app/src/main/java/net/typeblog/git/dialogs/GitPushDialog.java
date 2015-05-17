@@ -24,19 +24,15 @@ public class GitPushDialog extends BasePullPushDialog
 	}
 
 	@Override
-	protected void doTask(ProgressMonitor monitor, String remote, String ref, CredentialsProvider authorization, boolean force) {
-		try {
-			mProvider.git().push()
-				.setRemote(remote)
-				.add(ref)
-				.setCredentialsProvider(authorization)
-				.setPushTags()
-				.setForce(force)
-				.setProgressMonitor(monitor)
-				.call();
-		} catch (GitAPIException e) {
-			
-		}
+	protected void doTask(ProgressMonitor monitor, String remote, String ref, CredentialsProvider authorization, boolean force) throws GitAPIException, RuntimeException {
+		mProvider.git().push()
+			.setRemote(remote)
+			.add(ref)
+			.setCredentialsProvider(authorization)
+			.setPushTags()
+			.setForce(force)
+			.setProgressMonitor(monitor)
+			.call();
 	}
 	
 }

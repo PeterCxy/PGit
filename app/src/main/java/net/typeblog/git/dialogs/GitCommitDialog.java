@@ -2,7 +2,6 @@ package net.typeblog.git.dialogs;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
@@ -22,6 +21,7 @@ import java.util.List;
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
 import net.typeblog.git.support.RepoManager;
+import net.typeblog.git.tasks.GitTask;
 import static net.typeblog.git.support.Utility.*;
 
 public class GitCommitDialog extends ToolbarDialog
@@ -80,19 +80,17 @@ public class GitCommitDialog extends ToolbarDialog
 		new CommitTask().execute();
 	}
 	
-	private class CommitTask extends AsyncTask<Void, Void, Void> {
+	private class CommitTask extends GitTask<Void> {
 		String message;
 		boolean exit = false;
-		ProgressDialog progress;
+		
+		public CommitTask() {
+			super(getContext(), mProvider);
+		}
 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			
-			progress = new ProgressDialog(getContext());
-			progress.setMessage(getContext().getString(R.string.wait));
-			progress.setCancelable(false);
-			progress.show();
 			
 			message = mMessage.getText().toString().trim();
 
@@ -103,9 +101,9 @@ public class GitCommitDialog extends ToolbarDialog
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected void doGitTask(GitProvider provider, Void... params) throws GitAPIException, RuntimeException {
 			if (!exit) {
-				CommitCommand commit = mProvider.git().commit();
+				CommitCommand commit = provider.git().commit();
 				commit.setAmend(mAmend.isChecked());
 				commit.setMessage(message);
 
@@ -130,19 +128,13 @@ public class GitCommitDialog extends ToolbarDialog
 				RepoManager m = RepoManager.getInstance();
 				commit.setCommitter(m.getCommitterName(), m.getCommitterEmail());
 
-				try {
-					commit.call();
-				} catch (GitAPIException e) {
-					
-				}
+				commit.call();
 			}
-			return null;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			progress.dismiss();
 			dismiss();
 		}
 	}

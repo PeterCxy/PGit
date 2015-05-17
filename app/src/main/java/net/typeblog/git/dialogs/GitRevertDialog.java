@@ -11,6 +11,7 @@ import org.eclipse.jgit.lib.ObjectId;
 
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
+import net.typeblog.git.tasks.GitTask;
 import static net.typeblog.git.support.Utility.*;
 
 public class GitRevertDialog extends ToolbarDialog
@@ -48,37 +49,23 @@ public class GitRevertDialog extends ToolbarDialog
 		new RevertTask().execute();
 	}
 	
-	private class RevertTask extends AsyncTask<Void, Void, Void> {
-		private ProgressDialog progress;
+	private class RevertTask extends GitTask<Void> {
+		
+		public RevertTask() {
+			super(getContext(), mProvider);
+		}
 		
 		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			
-			progress = new ProgressDialog(getContext());
-			progress.setCancelable(false);
-			progress.setMessage(getContext().getString(R.string.wait));
-			progress.show();
+		protected void doGitTask(GitProvider provider, Void... params) throws GitAPIException, RuntimeException {
+			provider.git().revert()
+				.include(mCommit)
+				.setOurCommitName(mMessage.getText().toString())
+				.call();
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				mProvider.git().revert()
-					.include(mCommit)
-					.setOurCommitName(mMessage.getText().toString())
-					.call();
-			} catch (GitAPIException e) {
-				
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
-			progress.dismiss();
 			dismiss();
 		}
 

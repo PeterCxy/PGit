@@ -1,8 +1,6 @@
 package net.typeblog.git.dialogs;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.widget.CheckBox;
 import android.widget.ArrayAdapter;
 import android.widget.AbsListView;
@@ -22,6 +20,7 @@ import java.util.List;
 import net.typeblog.git.R;
 import net.typeblog.git.support.GitProvider;
 import net.typeblog.git.support.RepoManager;
+import net.typeblog.git.tasks.GitTask;
 import static net.typeblog.git.support.Utility.*;
 
 public abstract class BasePullPushDialog extends ToolbarDialog
@@ -35,7 +34,7 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 	private ListView mList;
 	private TextView mUserName, mPassword;
 	
-	protected abstract void doTask(ProgressMonitor monitor, String remote, String ref, CredentialsProvider authorization, boolean force);
+	protected abstract void doTask(ProgressMonitor monitor, String remote, String ref, CredentialsProvider authorization, boolean force) throws GitAPIException, RuntimeException;
 
 	public BasePullPushDialog(Context context, GitProvider provider, String ref) {
 		super(context);
@@ -84,12 +83,15 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 		new Task().execute();
 	}
 
-	private class Task extends AsyncTask<Void, String, Void> {
-		private ProgressDialog mProgress;
+	private class Task extends GitTask<Void> {
 		private String mRemote;
 		private String mMessage;
 		private String mName, mPass;
 		private int mWorks = 0;
+		
+		public Task() {
+			super(getContext(), mProvider);
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -97,15 +99,11 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 			mRemote = mRemotes.get(mList.getCheckedItemPosition());
 			mName = mUserName.getText().toString();
 			mPass = mPassword.getText().toString();
-			mProgress = new ProgressDialog(getContext());
-			mProgress.setCancelable(false);
 			mMessage = getContext().getString(R.string.wait);
-			mProgress.setMessage(mMessage);
-			mProgress.show();
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected void doGitTask(GitProvider provider, Void... params) throws GitAPIException, RuntimeException {
 			doTask(new ProgressMonitor() {
 				@Override
 				public void start(int p1) {
@@ -139,27 +137,12 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 			} catch (GitAPIException e) {
 
 			}*/
-			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(String... values) {
-			super.onProgressUpdate(values);
-			mProgress.setMessage(values[0]);
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-
-			// Give the user enough time to read the last message
-			mList.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						mProgress.dismiss();
-						dismiss();
-					}
-				}, 1000);
+			dismiss();
 		}
 	}
 
