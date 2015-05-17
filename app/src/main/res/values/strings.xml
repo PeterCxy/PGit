@@ -67,6 +67,7 @@
 	<string name="reset_to_confirm">Really want to reset to %s?\n\nTHIS CANNOT BE REVERTED.</string>
 	<string name="checkout_confirm">Checkout %s?</string>
 	<string name="delete_confirm">Delete %s?</string>
+	<string name="cleanup_confirm">Clean all changes up?\n\nTHIS CANNOT BE REVERTED.</string>
 	<string name="illegal_name">Illegal name of an object</string>
 	<string name="error_git">Git error: </string>
 	<string name="error_internal">Internal error: </string>
