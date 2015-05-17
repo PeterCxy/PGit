@@ -29,7 +29,7 @@ public class GitPushDialog extends BasePullPushDialog
 			.setRemote(remote)
 			.add(ref)
 			.setCredentialsProvider(authorization)
-			.setPushTags()
+			//.setPushTags()
 			.setForce(force)
 			.setProgressMonitor(monitor)
 			.call();

@@ -7,7 +7,9 @@ import org.eclipse.jgit.lib.Ref;
 
 import java.util.List;
 
+import net.typeblog.git.R;
 import net.typeblog.git.adapters.RefAdapter;
+import net.typeblog.git.dialogs.GitPushDialog;
 import net.typeblog.git.support.GitProvider;
 
 public class TagListFragment extends BaseListFragment<RefAdapter, Ref>
@@ -28,6 +30,34 @@ public class TagListFragment extends BaseListFragment<RefAdapter, Ref>
 	@Override
 	protected void onViewInflated() {
 
+	}
+
+	@Override
+	protected boolean shouldEnterActionMode(int pos) {
+		return true;
+	}
+
+	@Override
+	protected boolean multiChoice() {
+		return false;
+	}
+
+	@Override
+	protected int getActionModeMenu() {
+		return R.menu.action_mode_tags;
+	}
+
+	@Override
+	protected boolean onActionModeItemSelected(int id) {
+		Ref tag = mItemList.get(mList.getCheckedItemPosition());
+		String name = tag.getName();
+		switch (id) {
+			case R.id.tag_push:
+				new GitPushDialog(getActivity(), mProvider, name).show();
+				return true;
+			default:
+				return super.onActionModeItemSelected(id);
+		}
 	}
 
 	@Override
