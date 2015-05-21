@@ -11,6 +11,8 @@ import net.typeblog.git.R;
 import net.typeblog.git.adapters.RefAdapter;
 import net.typeblog.git.dialogs.GitPushDialog;
 import net.typeblog.git.support.GitProvider;
+import net.typeblog.git.tasks.GitTask;
+import static net.typeblog.git.support.Utility.*;
 
 public class TagListFragment extends BaseListFragment<RefAdapter, Ref>
 {
@@ -55,6 +57,13 @@ public class TagListFragment extends BaseListFragment<RefAdapter, Ref>
 			case R.id.tag_push:
 				new GitPushDialog(getActivity(), mProvider, name).show();
 				return true;
+			case R.id.tag_delete:
+				showConfirmDialog(
+					getActivity(),
+					String.format(getString(R.string.delete_confirm), name),
+					new DeleteTask(),
+					new String[]{name});
+				return true;
 			default:
 				return super.onActionModeItemSelected(id);
 		}
@@ -67,6 +76,18 @@ public class TagListFragment extends BaseListFragment<RefAdapter, Ref>
 		} catch (GitAPIException e) {
 
 		}
+	}
+	
+	private class DeleteTask extends GitTask<String> {
+		DeleteTask() {
+			super(getActivity(), mProvider);
+		}
+
+		@Override
+		protected void doGitTask(GitProvider provider, String... params) throws GitAPIException, RuntimeException {
+			provider.git().tagDelete().setTags(params[0]).call();
+		}
+
 	}
 
 }
