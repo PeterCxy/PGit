@@ -20,7 +20,7 @@ import static net.typeblog.git.support.Utility.*;
 
 public class BranchListFragment extends BaseListFragment<RefAdapter, Ref>
 {
-	private GitProvider mProvider;
+	protected GitProvider mProvider;
 
 	@Override
 	public void onAttach(Activity activity) {

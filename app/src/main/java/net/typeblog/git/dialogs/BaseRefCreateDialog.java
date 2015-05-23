@@ -14,7 +14,7 @@ import static net.typeblog.git.support.Utility.*;
 public abstract class BaseRefCreateDialog extends ToolbarDialog
 {
 	protected GitProvider mProvider;
-	private EditText mText;
+	protected EditText mText;
 	
 	protected abstract int getTitle();
 	protected abstract void doCreate(String name) throws GitAPIException, RuntimeException;
