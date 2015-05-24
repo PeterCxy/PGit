@@ -8,14 +8,17 @@ import android.util.Log;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.typeblog.git.R;
 import net.typeblog.git.adapters.CommitAdapter;
@@ -93,8 +96,28 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommi
 	@Override
 	protected void doLoad(List<RevCommit> list) {
 		try {
+			RevWalk walk = new RevWalk(mProvider.git().getRepository());
+			String branch = "refs/heads/" + mProvider.git().getRepository().getBranch();
 			for (RevCommit commit : mProvider.git().log().all().call()) {
 
+				// Trick: Pick out commits from this branch
+				// Origin: http://stackoverflow.com/questions/15822544/jgit-how-to-get-all-commits-of-a-branch-without-changes-to-the-working-direct
+				RevCommit targetCommit = walk.parseCommit(mProvider.git().getRepository().resolve(commit.getName()));
+				boolean foundInThisBranch = false;
+				for (Map.Entry<String, Ref> m : mProvider.git().getRepository().getAllRefs().entrySet()) {
+					if (m.getKey().startsWith("refs/heads")) {
+						if (walk.isMergedInto(targetCommit, walk.parseCommit(m.getValue().getObjectId()))) {
+							String foundInBranch = m.getValue().getName();
+							
+							if (foundInBranch.equals(branch)) {
+								foundInThisBranch = true;
+							}
+						}
+					}
+				}
+				
+				if (!foundInThisBranch) continue;
+				
 				if (DEBUG) {
 					Log.d(TAG, "adding commit " + commit.getShortMessage());
 				}
