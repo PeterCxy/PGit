@@ -87,7 +87,7 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 		private String mRemote;
 		private String mMessage;
 		private String mName, mPass;
-		private int mWorks = 0;
+		private int mWorks = 0, mCompleted = 0;
 		
 		public Task() {
 			super(getContext(), mProvider);
@@ -114,12 +114,14 @@ public abstract class BasePullPushDialog extends ToolbarDialog
 				public void beginTask(String name, int works) {
 					mMessage = name;
 					mWorks = works;
+					mCompleted = 0;
 					publishProgress(name);
 				}
 
 				@Override
 				public void update(int completed) {
-					publishProgress(mMessage + " (" + completed + "/" + mWorks + ")");
+					mCompleted += completed;
+					publishProgress(mMessage + " (" + mCompleted + "/" + mWorks + ")");
 				}
 
 				@Override
