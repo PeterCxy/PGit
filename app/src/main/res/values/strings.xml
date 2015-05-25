@@ -74,5 +74,6 @@
 	<string name="illegal_name">Illegal name of an object</string>
 	<string name="error_git">Git error: </string>
 	<string name="error_internal">Internal error: </string>
+	<string name="clone_confirm">Clone repo %s?</string>
 
 </resources>

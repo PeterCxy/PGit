@@ -12,6 +12,14 @@ import android.widget.Toast;
 
 import android.support.v7.widget.AppCompatEditText;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +27,9 @@ import java.util.List;
 import net.typeblog.git.R;
 import net.typeblog.git.adapters.RepoAdapter;
 import net.typeblog.git.dialogs.ToolbarDialog;
+import net.typeblog.git.support.GitProvider;
 import net.typeblog.git.support.RepoManager;
+import net.typeblog.git.tasks.GitTask;
 import static net.typeblog.git.BuildConfig.DEBUG;
 import static net.typeblog.git.support.Utility.*;
 
@@ -59,11 +69,21 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 
 	@Override
 	public void onItemClick(AdapterView<?> list, View v, int pos, long id) {
-		Intent i = new Intent(Intent.ACTION_MAIN);
-		i.setClass(this, RepoActivity.class);
-		i.putExtra("location", mRepos.get(pos));
-		i.putExtra("name", mRepoNames.get(pos));
-		startActivity(i);
+		String path = mRepos.get(pos);
+		if (new File(path).isDirectory() && new File(path + "/.git").isDirectory()) {
+			Intent i = new Intent(Intent.ACTION_MAIN);
+			i.setClass(this, RepoActivity.class);
+			i.putExtra("location", mRepos.get(pos));
+			i.putExtra("name", mRepoNames.get(pos));
+			startActivity(i);
+		} else {
+			showConfirmDialog(
+				this,
+				String.format(getString(R.string.clone_confirm), mRepoUrls.get(pos)),
+				new CloneTask(path, mRepoUrls.get(pos)),
+				RepoManager.getInstance().getAuthPass(path));
+		}
+		
 	}
 
 	@Override
@@ -95,6 +115,10 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 		
 		for (String repo : mRepos) {
 			
+			repo = repo.trim();
+			
+			if (repo.equals("")) continue;
+			
 			if (DEBUG) {
 				Log.d(TAG, "processing repo " + repo);
 			}
@@ -108,6 +132,34 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 		}
 		
 		mAdapter.notifyDataSetChanged();
+	}
+	
+	private GitProvider buildGitProvider(final String repo) {
+		Git g = null;
+
+		try {
+			g = new Git(new FileRepositoryBuilder()
+						.setGitDir(new File(repo + "/.git"))
+						.readEnvironment()
+						.findGitDir()
+						.build());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		final Git git = g;
+		
+		return new GitProvider() {
+			@Override
+			public Git git() {
+				return git;
+			}
+			
+			@Override
+			public String getLocation() {
+				return repo;
+			}
+		};
 	}
 	
 	private class AddRepoDialog extends ToolbarDialog {
@@ -180,7 +232,62 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 			RepoManager.getInstance().setCommitterIdentity(name.getText().toString().trim(), email.getText().toString().trim());
 			dismiss();
 		}
+		
+	}
+	
+	private class CloneTask extends GitTask<String> {
+		String currentMsg = "";
+		int currentWork = 0;
+		int currentCompleted = 0;
+		String url = "";
+		
+		CloneTask(String repo, String url) {
+			super(HomeActivity.this, buildGitProvider(repo));
+			this.url = url;
+		}
 
+		@Override
+		protected void doGitTask(GitProvider provider, String... params) throws GitAPIException, RuntimeException {
+			provider.git().cloneRepository()
+				.setDirectory(new File(provider.getLocation()))
+				.setURI(url)
+				.setBare(false)
+				.setCredentialsProvider(new UsernamePasswordCredentialsProvider(params[0], params[1]))
+				.setCloneSubmodules(true)
+				.setCloneAllBranches(true)
+				.setProgressMonitor(new ProgressMonitor() {
+					@Override
+					public void start(int p1) {
+					}
+
+					@Override
+					public void beginTask(String msg, int work) {
+						currentMsg = msg;
+						currentWork = work;
+						currentCompleted = 0;
+						
+						publishProgress(currentMsg + "(" + "0/" + work + ")");
+					}
+
+					@Override
+					public void update(int completed) {
+						currentCompleted += completed;
+						publishProgress(currentMsg + "(" + currentCompleted + "/" + currentWork + ")");
+					}
+
+					@Override
+					public void endTask() {
+					}
+
+					@Override
+					public boolean isCancelled() {
+						return false;
+					}
+
+					
+				})
+				.call();
+		}
 		
 	}
 }
