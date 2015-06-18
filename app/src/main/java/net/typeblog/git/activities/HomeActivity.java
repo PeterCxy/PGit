@@ -146,7 +146,7 @@ public class HomeActivity extends ToolbarActivity implements AdapterView.OnItemC
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
+		
 		final Git git = g;
 		
 		return new GitProvider() {

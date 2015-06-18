@@ -31,6 +31,7 @@ import net.typeblog.git.fragments.RemoteListFragment;
 import net.typeblog.git.fragments.TagListFragment;
 import net.typeblog.git.tasks.GitTask;
 import net.typeblog.git.support.GitProvider;
+import net.typeblog.git.support.RepoManager;
 import static net.typeblog.git.support.Utility.*;
 
 public class RepoActivity extends ToolbarActivity implements GitProvider
@@ -68,6 +69,18 @@ public class RepoActivity extends ToolbarActivity implements GitProvider
 			finish();
 		}
 		mGit = new Git(mRepo);
+		
+		String mail = RepoManager.getInstance().getCommitterEmail();
+		String name = RepoManager.getInstance().getCommitterName();
+
+		mGit.getRepository().getConfig().setString("user", null, "name", name);
+		mGit.getRepository().getConfig().setString("user", null, "email", mail);
+		
+		try {
+			mGit.getRepository().getConfig().save();
+		} catch (Exception e) {
+			
+		}
 		
 		// Pager
 		mPager = $(this, R.id.pager);
