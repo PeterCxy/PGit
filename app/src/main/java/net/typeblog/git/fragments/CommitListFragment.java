@@ -98,7 +98,7 @@ public class CommitListFragment extends BaseListFragment<CommitAdapter, RevCommi
 		try {
 			RevWalk walk = new RevWalk(mProvider.git().getRepository());
 			String branch = "refs/heads/" + mProvider.git().getRepository().getBranch();
-			for (RevCommit commit : mProvider.git().log().all().call()) {
+			for (RevCommit commit : mProvider.git().log().setMaxCount(200).call()) {
 
 				// Trick: Pick out commits from this branch
 				// Origin: http://stackoverflow.com/questions/15822544/jgit-how-to-get-all-commits-of-a-branch-without-changes-to-the-working-direct
